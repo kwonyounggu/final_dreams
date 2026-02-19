@@ -25,12 +25,14 @@ endif
 	flutter pub get #flutter command
 
 	@echo "Building for web..."  #print the log
-	flutter build web --base-href $(BASE_HREF) --release   #this command using the Base_Href in your index.htm and base_href value is getting from the above variable
+# flutter build web --base-href $(BASE_HREF) --release   #this command using the Base_Href in your index.htm and base_href value is getting from the above variable
+	flutter build web --base-href "/" --release
 
 	@echo "Deploying to git repository"
 	cd build/web && \
 	echo "webmonster.ca" > CNAME && \
 	git init && \
+	git checkout -B main && \
 	git add . && \
 	git commit -m "Deploy Version $(BUILD_VERSION)" && \
 	git branch -M main && \

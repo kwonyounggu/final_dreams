@@ -1,44 +1,26 @@
-import 'package:final_dreams/features/home/presentation/logo_name.dart';
-import 'package:final_dreams/features/projects/presentation/projects_page.dart';
-import 'package:final_dreams/features/study/vision_science/presentation/vision_science_page.dart';
+import 'package:final_dreams/features/shared/widgets/section_layout.dart';
+import 'package:final_dreams/features/study/models/study_topic.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-// Import your shared components
-import 'package:final_dreams/features/shared/widgets/section_layout.dart';
 
-// Import your feature models and pages
-import 'package:final_dreams/features/study/models/study_topic.dart';
-import 'package:final_dreams/features/study/buddhism/presentation/buddhism_home.dart';
-import 'package:final_dreams/features/study/physics/presentation/physics_list_page.dart'; // Assume you created this based on the Buddhism pattern
-
-class HomePage extends StatelessWidget 
+class HomeScreen extends ConsumerStatefulWidget 
 {
-  const HomePage({super.key});
+  const HomeScreen({super.key});
 
+  @override
+  // ignore: library_private_types_in_public_api
+  _HomeScreenState createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends ConsumerState<HomeScreen> 
+{
   @override
   Widget build(BuildContext context) 
   {
     return Scaffold
     (
-      // Sticky AppBar for easy navigation
-      appBar: AppBar
-      (
-        //title: const Text("YOUNGGU"),
-        title: const LogoAndName
-              (
-                name: 'YounG',
-                icon: Icons.person, // or Icons.person, etc.
-                // imagePath: 'assets/logo.png',
-              ),
-        actions: 
-        [
-          TextButton(onPressed: () {}, child: const Text("About")),
-          TextButton(onPressed: () {}, child: const Text("Study")),
-          TextButton(onPressed: () {}, child: const Text("Music")),
-          TextButton(onPressed: () {}, child: const Text("Projects")),
-        ],
-      ),
       body: SingleChildScrollView
       (
         child: Column
@@ -126,7 +108,7 @@ class HomePage extends StatelessWidget
             padding: const EdgeInsets.symmetric(horizontal: 20.0),
             child: Text // ← no 'const'
             (
-              "I build software, play jazz saxophone, and explore the mysteries of quantum mechanics, visual perception, and Buddhist philosophy. This site is my digital garden—a place where all my passions meet.",
+              "I build software, play Korean Gayo saxophone, and explore the mysteries of quantum mechanics, visual perception, and Buddhist philosophy. This site is my digital garden—a place where all my passions meet.",
               style: TextStyle(fontSize: 20, color: Colors.blueGrey.shade100),
             ),
           )
@@ -200,18 +182,18 @@ class StudyGrid extends StatelessWidget {
   void _handleNavigation(BuildContext context, String title) {
     switch (title) {
       case "Apps":
-        Navigator.push(context, MaterialPageRoute(builder: (context) => const ProjectsPage()));
+        //Navigator.push(context, MaterialPageRoute(builder: (context) => const ProjectsPage()));
         break;
       case "Buddhism":
-        Navigator.push(context, MaterialPageRoute(builder: (context) => const BuddhismHomePage()));
+        //Navigator.push(context, MaterialPageRoute(builder: (context) => const BuddhismHomePage()));
         break;
       case "Quantum Mechanics":
-        Navigator.push(context, MaterialPageRoute(builder: (context) => const PhysicsListPage()));
+        //Navigator.push(context, MaterialPageRoute(builder: (context) => const PhysicsListPage()));
         break;
       case "Vision Science":
         // UPDATED: Now navigates to your interactive lab
-        Navigator.push(context, 
-          MaterialPageRoute(builder: (context) => const VisionSciencePage()));
+        //Navigator.push(context, 
+        //  MaterialPageRoute(builder: (context) => const VisionSciencePage()));
         break;
     
       default:
@@ -254,7 +236,7 @@ class ContactSection extends StatelessWidget {
               _contactButton(
                 icon: Icons.email_outlined,
                 label: "Email Me",
-                onPressed: () => _launchUrl("mailto:your.email@example.com"),
+                onPressed: () => _launchUrl("mailto:kwon.younggu@google.com"),
               ),
               _contactButton(
                 icon: Icons.link,
