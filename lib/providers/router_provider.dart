@@ -47,7 +47,14 @@ final routerProvider = Provider<GoRouter>((ref) {
           GoRoute(
             path: '/study',
             name: 'study',
-            builder: (context, state) => const StudyScreen(),
+            //builder: (context, state) => const StudyScreen(),
+            pageBuilder: (context, state) => NoTransitionPage(
+              child: Title(
+                title: 'Study & Research | YounG',
+                color: Colors.lightBlue,
+                child: StudyScreen(),
+              ),
+            ),
           ),
           GoRoute(
             path: '/projects',
