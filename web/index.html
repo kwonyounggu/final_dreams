@@ -1,127 +1,98 @@
 <!DOCTYPE html>
 <html>
 <head>
+  <!-- Base href injected at build time -->
   <base href="$FLUTTER_BASE_HREF">
 
   <meta charset="UTF-8">
   <meta content="IE=Edge" http-equiv="X-UA-Compatible">
-  
+  <meta name="description" content="YounG Portfolio - Personal history, research notes, and projects.">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <title>YounG Portfolio</title>
 
-      <meta
-      name="description"
-      content="Personal history, research notes, and interesting projects by YounG, a retired computer scientist based in Ontario, Canada."
-    />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <!-- Canonical & Open Graph -->
+  <link rel="canonical" href="https://webmonster.ca">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="YounG Portfolio">
+  <meta property="og:description" content="Personal history, music, tech projects.">
+  <meta property="og:url" content="https://webmonster.ca">
+  <meta property="og:image" content="https://webmonster.ca/assets/og-image.png">
 
-    <!-- Canonical URL -->
-    <link rel="canonical" href="https://webmonster.ca/" />
+  <!-- Optional Twitter cards -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="YounG Portfolio">
+  <meta name="twitter:description" content="Personal history, music, tech projects.">
+  <meta name="twitter:image" content="https://webmonster.ca/assets/og-image.png">
 
-    <!-- Open Graph -->
-    <meta property="og:type" content="website" />
-    <meta property="og:title" content="YounG – Personal History & Projects" />
-    <meta
-      property="og:description"
-      content="Explore my personal history, music production experiments, and technical DIY projects."
-    />
-    <meta property="og:url" content="https://webmonster.ca/" />
-    <meta property="og:image" content="https://webmonster.ca/assets/og-image.png" />
-
-    <!-- Twitter -->
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="YounG – Personal History & Projects" />
-    <meta
-      name="twitter:description"
-      content="Personal history, music, and tech projects."
-    />
-    <meta name="twitter:image" content="https://webmonster.ca/assets/og-image.png" />
-
-    <!-- Optional basic keywords (not critical today) -->
-    <meta
-      name="keywords"
-      content="personal history, music production, computer science, DIY HVAC, Ontario"
-    />
-  
-    <style>
-      body { background-color: #2C3E50; margin: 0; }
-      #loading {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        height: 100vh;
-        width: 100vw;
-        position: fixed;
-        top: 0;
-        left: 0;
-        background-color: #2C3E50;
-        color: white;
-        font-family: sans-serif;
-        z-index: 9999;
-        transition: opacity 0.5s;
-      }
-
-      .loader {
-        border: 4px solid rgba(255, 255, 255, 0.1);
-        border-top: 4px solid #3498db;
-        border-radius: 50%;
-        width: 50px;
-        height: 50px;
-        animation: spin 1s linear infinite;
-        margin-bottom: 20px;
-      }
-
-      @keyframes spin {
-        0% { transform: rotate(0deg); }
-        100% { transform: rotate(360deg); }
-      }
-    </style>
-
-    <script type="text/javascript">
-      (function(l) {
-        if (l.search[1] === '/' ) {
-          var decoded = l.search.slice(1).split('&').map(function(s) { 
-            return s.replace(/~and~/g, '&') 
-          }).join('?');
-          // This line is the magic—it cleans the URL in the browser bar
-          window.history.replaceState(null, null,
-              l.pathname.slice(0, l.pathname.lastIndexOf('/')) + decoded + l.hash
-          );
-        }
-      }(window.location))
-    </script>
+  <style>
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      background: #2C3E50;
+      color: white;
+      font-family: sans-serif;
+    }
+    #loading {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      z-index: 9999;
+      transition: opacity 0.5s;
+      background: #2C3E50;
+    }
+    .loader {
+      border: 4px solid rgba(255, 255, 255, 0.1);
+      border-top: 4px solid #3498DB;
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      animation: spin 1s linear infinite;
+      margin-bottom: 20px;
+    }
+    @keyframes spin {
+      0%   { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+  </style>
 </head>
 <body>
-  <div style="display:none;">
-    <h1>YounG - Portfolio & Digital Garden</h1>
-    <p>M.CompSci graduate being interested in Vision Science, Quantum Physics, and Music.</p>
-    <p>Explore my research on Buddhism, Saxophone recordings, and Flutter applications.</p>
-  </div>
-
   <div id="loading">
     <div class="loader"></div>
-    <div style="letter-spacing: 2px; font-weight: 300;">LOADING THE GARDEN</div>
+    <div id="loading-text" style="letter-spacing: 2px; font-weight: 300;">LOADING...</div>
   </div>
 
+  <!-- This value is injected by flutter build; do not change the token -->
   <script>
-    // This is the modern bootstrap sequence for Flutter 3.22+
-    window.addEventListener('load', function(ev) {
-      {{flutter_bootstrap_js}}
-    });
+    var serviceWorkerVersion = '{{flutter_service_worker_version}}';
+  </script>
 
-    // Custom hook to remove the loader when Flutter is ready
-    function removeLoader() {
-      var loader = document.getElementById("loading");
-      if (loader) {
-        loader.style.opacity = "0";
+  <!-- Modern Flutter web bootstrap -->
+  <script src="flutter_bootstrap.js" async></script>
+
+  <script>
+    (function() {
+      // Show which page is being restored, based on path
+      const segments = window.location.pathname.split('/').filter(Boolean);
+      const last = segments.length ? segments[segments.length - 1] : 'home';
+      document.getElementById('loading-text').innerText =
+        'RESTORING ' + last.toUpperCase() + '...';
+
+      // Hide loader when Flutter has rendered first frame
+      window.addEventListener('flutter-first-frame', function () {
+        const loader = document.getElementById('loading');
+        if (!loader) return;
+        loader.style.opacity = '0';
         setTimeout(() => loader.remove(), 500);
-      }
-    }
-
-    // We listen for the first frame being rendered by Flutter
-    window.addEventListener('flutter-first-frame', function() {
-      removeLoader();
-    });
+      });
+    })();
   </script>
 </body>
 </html>

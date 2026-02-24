@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Redirecting...</title>
+  <script type="text/javascript">
+    // this is from https://chatlyai.app/chat/e73b28a2-5e25-4a19-952e-d88e31312443?utm_model=vgpt-g4
+    // Single Page Apps for GitHub Pages
+    // MIT License
+    // https://github.com/rafgraph/spa-github-pages
+    // This script checks to see if a redirect is present in the query string
+    // and converts it back into the correct url and adds it to the browser's history.
+    // It then redirects the browser to the normal page even if the redirect has a query string or hash.
+    (function(){
+      var redirect = sessionStorage.getItem('redirect');
+      if (redirect) {
+        sessionStorage.removeItem('redirect');
+        history.replaceState(null, null, redirect);
+      }
+      var path = window.location.pathname;
+      var match = path.match(/^\/(?:[^/]+\/)*404\.html$/); // Check for 404.html path
+      if (match) {
+        var url = window.location.protocol + '//' + window.location.hostname + (window.location.port ? ':' + window.location.port : '') + '/' + path.substring(1).replace('404.html', '');
+        history.replaceState(null, null, url);
+      }
+      var currentPath = window.location.pathname;
+      if (currentPath.endsWith('/')) { // Handle trailing slashes
+        history.replaceState(null, null, currentPath.slice(0, -1));
+      }
+      // Redirect to index.html, letting the Flutter app handle the routing
+      window.location.replace(window.location.protocol + '//' + window.location.hostname + (window.location.port ? ':' + window.location.port : '') + '/index.html' + window.location.search + window.location.hash);
+    })();
+  </script>
+</head>
+<body>
+  If you are not redirected automatically, follow this <a href="/">link to the homepage</a>.
+</body>
+</html>

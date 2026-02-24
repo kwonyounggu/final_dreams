@@ -8,7 +8,7 @@ class StudyScreen extends StatelessWidget {
   // Helper function to load the asset
   Future<String> _loadMarkdown() async {
     // Note: The path must exactly match your pubspec.yaml listing
-    return await rootBundle.loadString('studies/buddhism/intro.md');
+    return await rootBundle.loadString('/assets/studies/buddhism/intro.md');
   }
 
   @override
