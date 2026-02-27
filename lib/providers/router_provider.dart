@@ -1,11 +1,13 @@
 import 'package:final_dreams/core/errors/not_found_screen.dart';
 import 'package:final_dreams/features/about/about_screen.dart';
 import 'package:final_dreams/features/apps/apps_screen.dart';
-import 'package:final_dreams/features/home/presentation/home_screen_org.dart';
+import 'package:final_dreams/features/home/presentation/home_screen.dart';
+//import 'package:final_dreams/features/home/presentation/home_screen_org.dart';
 import 'package:final_dreams/features/music/presentation/music_screen.dart';
 import 'package:final_dreams/features/projects/presentation/projects_screen.dart';
 import 'package:final_dreams/features/shared/widgets/top_menu.dart';
 import 'package:final_dreams/features/study/study_screen.dart';
+// import 'package:final_dreams/features/study/study_screen_org.dart.org';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';

@@ -1,272 +1,135 @@
+import 'package:final_dreams/features/apps/app_card.dart';
+import 'package:final_dreams/features/apps/app_structure.dart';
+import 'package:final_dreams/features/projects/project_card.dart';
+import 'package:final_dreams/features/projects/project_structure.dart';
 import 'package:final_dreams/features/shared/widgets/section_layout.dart';
+import 'package:final_dreams/features/study/models/study_topic.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 
-class HomeScreen extends ConsumerWidget {
+class HomeScreen extends ConsumerStatefulWidget 
+{
   const HomeScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    return Scaffold(
-      body: SingleChildScrollView(
-        child: Column(
-          children: const [
-            // 1. Personal intro with photo and description
-            IntroRow(
-              name: 'YounG',
-              photoUrl: 'assets/photo.jpg', // replace with your image
-              description:
-                  'Software engineer, saxophonist, and forever curious about quantum reality, vision, and the mind. This site is my digital garden—a place where all my passions meet.',
+  // ignore: library_private_types_in_public_api
+  _HomeScreenState createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends ConsumerState<HomeScreen> 
+{
+  @override
+  Widget build(BuildContext context) 
+  {
+    return Scaffold
+    (
+      body: SingleChildScrollView
+      (
+        child: Column
+        (
+          children: 
+          [
+            _buildHero(context),
+            
+            // About / History Section
+            const SectionLayout
+            (
+              title: "History & Vision",
+              child: Text
+              (
+                "M.CompSci graduate exploring the intersection of Vision Science, "
+                "Quantum Mechanics, and Buddhist philosophy. Building tools for the future.",
+                style: TextStyle(fontSize: 18),
+              ),
             ),
 
-            // 2. Quick navigation cards (Explore my world)
-            CategoryCardGrid(),
-
-            // 3. Life Study (your existing grid)
-            SectionLayout(
-              title: 'Life Study',
+            // Study Grid Section
+            const SectionLayout(
+              title: "Life Study",
               backgroundColor: Color(0xFFF8F9FA),
               child: StudyGrid(),
             ),
 
-            // 4. Featured Music
+            // Music Section
             SectionLayout(
-              title: 'Latest from Saxophone',
-              child: MusicFeatured(),
+              title: "Music & Saxophone",
+              child: Container(
+                height: 200,
+                decoration: BoxDecoration(
+                  color: Colors.blueGrey[900],
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: const Center(
+                  child: Text("Recording Studio Coming Soon", 
+                    style: TextStyle(color: Colors.white)),
+                ),
+              ),
+            ),
+            // Projects Section
+            SectionLayout(
+              title: "Projects & Experiments",
+              backgroundColor: Colors.white,
+              child: ProjectsGrid(),
             ),
 
-            // 5. Contact & Footer
-            ContactSection(),
-            Footer(),
+            // Apps Section
+            SectionLayout(
+              title: "Mobile Apps",
+              backgroundColor: Color(0xFFF8F9FA),
+              child: AppsGrid(),
+            ),
+            
+            // ADD THIS:
+            const ContactSection(),
+            const Footer(),
           ],
         ),
       ),
     );
   }
-}
 
-class IntroRow extends StatelessWidget {
-  final String name;
-  final String photoUrl;
-  final String description;
-
-  const IntroRow({
-    super.key,
-    required this.name,
-    required this.photoUrl,
-    required this.description,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 40),
-      child: LayoutBuilder(
-        builder: (context, constraints) {
-          if (constraints.maxWidth < 600) {
-            // Stack vertically on mobile
-            return Column(
-              children: [
-                CircleAvatar(
-                  radius: 80,
-                  backgroundImage: AssetImage(photoUrl), // or NetworkImage
-                ),
-                const SizedBox(height: 24),
-                _buildTextColumn(),
-              ],
-            );
-          } else {
-            // Side by side on desktop/tablet
-            return Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                CircleAvatar(
-                  radius: 90,
-                  backgroundImage: AssetImage(photoUrl),
-                ),
-                const SizedBox(width: 40),
-                Expanded(child: _buildTextColumn()),
-              ],
-            );
-          }
-        },
-      ),
-    );
-  }
-
-  Widget _buildTextColumn() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          'Hi, I’m $name.',
-          style: const TextStyle(
-            fontSize: 36,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        const SizedBox(height: 16),
-        Text(
-          description,
-          style: const TextStyle(
-            fontSize: 18,
-            height: 1.5,
-            color: Colors.black87,
-          ),
-        ),
-      ],
-    );
-  }
-}
-
-
-class CategoryCardGrid extends StatelessWidget {
-  const CategoryCardGrid({super.key});
-
-  final List<CategoryItem> categories = const [
-    CategoryItem('About', Icons.person_outline, '/about'),
-    CategoryItem('Music', Icons.music_note, '/music'),
-    CategoryItem('Study', Icons.school, '/study'),
-    CategoryItem('Projects', Icons.build, '/projects'),
-    CategoryItem('Apps', Icons.phone_android, '/apps'),
-  ];
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Text(
-            'Explore my world',
-            style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-          ),
-          const SizedBox(height: 20),
-          GridView.builder(
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: _crossAxisCount(context),
-              crossAxisSpacing: 16,
-              mainAxisSpacing: 16,
-              childAspectRatio: 1.2,
-            ),
-            itemCount: categories.length,
-            itemBuilder: (context, index) {
-              final cat = categories[index];
-              return Card(
-                elevation: 2,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: InkWell(
-                  onTap: () => context.go(cat.route),
-                  borderRadius: BorderRadius.circular(12),
-                  child: Padding(
-                    padding: const EdgeInsets.all(16),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(cat.icon, size: 40, color: Theme.of(context).primaryColor),
-                        const SizedBox(height: 12),
-                        Text(
-                          cat.label,
-                          style: const TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              );
-            },
-          ),
-        ],
-      ),
-    );
-  }
-
-  int _crossAxisCount(BuildContext context) {
-    double width = MediaQuery.of(context).size.width;
-    if (width < 400) return 2;
-    if (width < 800) return 3;
-    return 5; // all five in one row on very wide screens
-  }
-}
-
-class CategoryItem {
-  final String label;
-  final IconData icon;
-  final String route;
-  const CategoryItem(this.label, this.icon, this.route);
-}
-
-
-class MusicFeatured extends StatelessWidget {
-  const MusicFeatured({super.key});
-
-  @override
-  Widget build(BuildContext context) {
+  Widget _buildHero(BuildContext context) 
+  {
     return Container(
-      height: 240,
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: [Colors.blueGrey.shade800, Colors.blueGrey.shade600],
+      height: 500,
+      width: double.infinity,
+      decoration: BoxDecoration
+      (
+        gradient: LinearGradient
+        (
+          colors: [Colors.blueGrey.shade900, Colors.blueGrey.shade700],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
-        borderRadius: BorderRadius.circular(16),
       ),
-      child: Stack(
-        children: [
-          Positioned.fill(
-            child: Opacity(
-              opacity: 0.2,
-              child: Icon(
-                Icons.music_note,
-                size: 180,
-                color: Colors.white.withOpacity(0.2),
-              ),
-            ),
+      child: Column
+      (
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: 
+        [
+          const CircleAvatar(
+            radius: 60,
+            backgroundColor: Colors.white24,
+            child: Icon(Icons.person, size: 60, color: Colors.white),
           ),
-          Padding(
-            padding: const EdgeInsets.all(24),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const Text(
-                  '🎷 Latest Recording',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 22,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                const SizedBox(height: 12),
-                const Text(
-                  'Listen to my recent saxophone improvisation.',
-                  style: TextStyle(color: Colors.white70, fontSize: 16),
-                ),
-                const SizedBox(height: 20),
-                ElevatedButton.icon(
-                  onPressed: () => context.go('/music'),
-                  icon: const Icon(Icons.play_arrow),
-                  label: const Text('Listen Now'),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.white,
-                    foregroundColor: Colors.blueGrey.shade800,
-                  ),
-                ),
-              ],
-            ),
+          const SizedBox(height: 24),
+          const Text(
+            "The Digital Garden",
+            style: TextStyle(fontSize: 42, color: Colors.white, fontWeight: FontWeight.bold),
           ),
+          const SizedBox(height: 12),
+          Padding
+          (
+            padding: const EdgeInsets.symmetric(horizontal: 20.0),
+            child: Text // ← no 'const'
+            (
+              "I build software, play Korean Gayo saxophone, and explore the mysteries of quantum mechanics, visual perception, and Buddhist philosophy. This site is my digital garden—a place where all my passions meet.",
+              style: TextStyle(fontSize: 20, color: Colors.blueGrey.shade100),
+            ),
+          )
         ],
       ),
     );
@@ -338,27 +201,79 @@ class StudyGrid extends StatelessWidget {
     switch (title) {
       case "Apps":
         //Navigator.push(context, MaterialPageRoute(builder: (context) => const ProjectsPage()));
+        context.go('/apps');
         break;
       case "Buddhism":
         //Navigator.push(context, MaterialPageRoute(builder: (context) => const BuddhismHomePage()));
-        context.go('/study/buddhism'); 
+        context.go('/study'); // fallback to study list for now
         break;
       case "Quantum Mechanics":
         //Navigator.push(context, MaterialPageRoute(builder: (context) => const PhysicsListPage()));
+        context.go('/study');
         break;
       case "Vision Science":
         // UPDATED: Now navigates to your interactive lab
         //Navigator.push(context, 
         //  MaterialPageRoute(builder: (context) => const VisionSciencePage()));
+        context.go('/study');
         break;
     
       default:
         //debugPrint("No route defined for $title");
-        context.go('/study'); // fallback to study list
+        context.go('/study');
     }
   }
 }
+class ProjectsGrid extends StatelessWidget {
+  const ProjectsGrid({super.key});
 
+  @override
+  Widget build(BuildContext context) {
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        double width = constraints.maxWidth;
+        int crossAxisCount = width > 900 ? 3 : (width > 600 ? 2 : 1);
+        return GridView.builder(
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: crossAxisCount,
+            crossAxisSpacing: 20,
+            mainAxisSpacing: 20,
+            childAspectRatio: 1.0, // adjust as needed
+          ),
+          itemCount: myProjects.length,
+          itemBuilder: (context, index) => ProjectCard(project: myProjects[index]),
+        );
+      },
+    );
+  }
+}
+class AppsGrid extends StatelessWidget {
+  const AppsGrid({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        double width = constraints.maxWidth;
+        int crossAxisCount = width > 900 ? 3 : (width > 600 ? 2 : 1);
+        return GridView.builder(
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: crossAxisCount,
+            crossAxisSpacing: 20,
+            mainAxisSpacing: 20,
+            childAspectRatio: 1.0, // adjust as needed
+          ),
+          itemCount: myApps.length,
+          itemBuilder: (context, index) => AppCard(app: myApps[index]),
+        );
+      },
+    );
+  }
+}
 class ContactSection extends StatelessWidget {
   const ContactSection({super.key});
 
