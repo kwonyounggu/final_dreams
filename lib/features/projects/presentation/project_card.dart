@@ -1,61 +1,96 @@
+import 'package:final_dreams/features/projects/models/project_structure.dart';
 import 'package:flutter/material.dart';
-import '../models/project_model.dart';
+import 'package:url_launcher/url_launcher.dart'; // add url_launcher to pubspec
+
 
 class ProjectCard extends StatelessWidget {
-  final ProjectModel project;
+  final Project project;
 
   const ProjectCard({super.key, required this.project});
 
   @override
   Widget build(BuildContext context) {
     return Card(
-      elevation: 4,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      elevation: 2,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       child: Padding(
-        padding: const EdgeInsets.all(20),
+        padding: const EdgeInsets.all(12.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                _buildStatusBadge(project.status),
-                const Icon(Icons.developer_mode, color: Colors.blueGrey),
-              ],
+            if (project.imageUrl != null)
+              ClipRRect(
+                borderRadius: BorderRadius.circular(8),
+                child: Image.asset(
+                  project.imageUrl!,
+                  height: 120,
+                  width: double.infinity,
+                  fit: BoxFit.cover,
+                  errorBuilder: (_, __, ___) => const Icon(Icons.broken_image),
+                ),
+              ),
+            const SizedBox(height: 12),
+            Text(
+              project.title,
+              style: const TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+              ),
             ),
-            const SizedBox(height: 16),
-            Text(project.title, style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
             const SizedBox(height: 8),
-            Text(project.description, style: TextStyle(color: Colors.grey.shade600)),
-            const Spacer(),
+            Expanded(
+              child: Text(
+                project.description,
+                maxLines: 3,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
+            const SizedBox(height: 12),
             Wrap(
               spacing: 8,
-              children: project.techStack.map((tech) => Chip(
-                label: Text(tech, style: const TextStyle(fontSize: 10)),
-                visualDensity: VisualDensity.compact,
-              )).toList(),
+              children: project.tags.map((tag) {
+                return Chip(
+                  label: Text(tag),
+                  backgroundColor: Colors.grey.shade200,
+                  padding: EdgeInsets.zero,
+                  materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                );
+              }).toList(),
             ),
-            const Divider(),
+            const SizedBox(height: 12),
             Row(
+              mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 if (project.githubUrl != null)
-                  IconButton(onPressed: () {}, icon: const Icon(Icons.code)),
+                  IconButton(
+                    icon: const Icon(Icons.code),
+                    onPressed: () => _launchUrl(project.githubUrl!),
+                    tooltip: 'GitHub',
+                  ),
                 if (project.appStoreUrl != null)
-                  IconButton(onPressed: () {}, icon: const Icon(Icons.apple)),
+                  IconButton(
+                    icon: const Icon(Icons.apple),
+                    onPressed: () => _launchUrl(project.appStoreUrl!),
+                    tooltip: 'App Store',
+                  ),
+                if (project.playStoreUrl != null)
+                  IconButton(
+                    icon: const Icon(Icons.android),
+                    onPressed: () => _launchUrl(project.playStoreUrl!),
+                    tooltip: 'Google Play',
+                  ),
               ],
-            )
+            ),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildStatusBadge(ProjectStatus status) {
-    Color color = status == ProjectStatus.live ? Colors.green : Colors.orange;
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-      decoration: BoxDecoration(color: color.withOpacity(0.1), borderRadius: BorderRadius.circular(8)),
-      child: Text(status.name.toUpperCase(), style: TextStyle(color: color, fontSize: 10, fontWeight: FontWeight.bold)),
-    );
+  Future<void> _launchUrl(String url) async {
+    final uri = Uri.parse(url);
+    if (await canLaunchUrl(uri)) {
+      await launchUrl(uri);
+    }
   }
 }

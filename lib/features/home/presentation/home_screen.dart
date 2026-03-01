@@ -1,9 +1,10 @@
-import 'package:final_dreams/features/apps/app_card.dart';
-import 'package:final_dreams/features/apps/app_structure.dart';
-import 'package:final_dreams/features/projects/project_card.dart';
-import 'package:final_dreams/features/projects/project_structure.dart';
+import 'package:final_dreams/features/projects/presentation/project_card.dart';
+import 'package:final_dreams/features/projects/models/project_structure.dart';
 import 'package:final_dreams/features/shared/widgets/section_layout.dart';
 import 'package:final_dreams/features/study/models/study_topic.dart';
+
+import 'package:final_dreams/features/travel/model/travel_structure.dart';
+import 'package:final_dreams/features/travel/presentation/travel_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -75,11 +76,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
               child: ProjectsGrid(),
             ),
 
-            // Apps Section
             SectionLayout(
-              title: "Mobile Apps",
-              backgroundColor: Color(0xFFF8F9FA),
-              child: AppsGrid(),
+              title: "Travel Stories",
+              backgroundColor: const Color(0xFFF8F9FA),
+              child: const TravelGrid(),
             ),
             
             // ADD THIS:
@@ -117,7 +117,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
           ),
           const SizedBox(height: 24),
           const Text(
-            "The Digital Garden",
+            "The Digital Garden now under construction",
             style: TextStyle(fontSize: 42, color: Colors.white, fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 12),
@@ -249,8 +249,8 @@ class ProjectsGrid extends StatelessWidget {
     );
   }
 }
-class AppsGrid extends StatelessWidget {
-  const AppsGrid({super.key});
+class TravelGrid extends StatelessWidget {
+  const TravelGrid({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -265,10 +265,10 @@ class AppsGrid extends StatelessWidget {
             crossAxisCount: crossAxisCount,
             crossAxisSpacing: 20,
             mainAxisSpacing: 20,
-            childAspectRatio: 1.0, // adjust as needed
+            childAspectRatio: 0.75, // taller cards for travel
           ),
-          itemCount: myApps.length,
-          itemBuilder: (context, index) => AppCard(app: myApps[index]),
+          itemCount: myTravels.length,
+          itemBuilder: (context, index) => TravelCard(travel: myTravels[index]),
         );
       },
     );

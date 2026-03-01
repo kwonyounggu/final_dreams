@@ -1,5 +1,4 @@
-import 'dart:convert';
-import 'package:final_dreams/features/study/study_structure.dart';
+import 'package:final_dreams/features/study/models/study_structure.dart';
 import 'package:flutter/services.dart';
 
 

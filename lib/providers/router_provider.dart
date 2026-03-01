@@ -1,13 +1,14 @@
 import 'package:final_dreams/core/errors/not_found_screen.dart';
 import 'package:final_dreams/features/about/about_screen.dart';
-import 'package:final_dreams/features/apps/apps_screen.dart';
+
+import 'package:final_dreams/features/travel/presentation/travel_screen.dart';
 import 'package:final_dreams/features/home/presentation/home_screen.dart';
-//import 'package:final_dreams/features/home/presentation/home_screen_org.dart';
+
 import 'package:final_dreams/features/music/presentation/music_screen.dart';
 import 'package:final_dreams/features/projects/presentation/projects_screen.dart';
 import 'package:final_dreams/features/shared/widgets/top_menu.dart';
 import 'package:final_dreams/features/study/study_screen.dart';
-// import 'package:final_dreams/features/study/study_screen_org.dart.org';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -79,13 +80,31 @@ final routerProvider = Provider<GoRouter>
             (
               path: '/projects',
               name: 'projects',
-              builder: (context, state) => const ProjectsScreen(),
+              //builder: (context, state) => const ProjectsScreen(),
+              pageBuilder: (context, state) => NoTransitionPage
+              (
+                child: Title
+                (
+                  title: 'Projects | YounG',
+                  color: Colors.lightBlue,
+                  child: ProjectsScreen(),
+                ),
+              ),
             ),
             GoRoute
             (
-              path: '/apps',
-              name: 'apps',
-              builder: (context, state) => const AppsScreen(),
+              path: '/travel',
+              name: 'travel',
+              //builder: (context, state) => const AppsScreen(),
+              pageBuilder: (context, state) => NoTransitionPage
+              (
+                child: Title
+                (
+                  title: 'Travel | YounG',
+                  color: Colors.lightBlue,
+                  child: TravelScreen(),
+                ),
+              ),
             ),
           ],
         ),
@@ -100,10 +119,10 @@ Widget _buildDrawer(BuildContext context, String currentLocation)
   final menuItems = [
     ('Home', '/'),
     ('About', '/about'),
-    ('Music', '/music'),
     ('Study', '/study'),
     ('Projects', '/projects'),
-    ('Apps', '/apps'),
+    ('Travel', '/travel'),
+    ('Music', '/music'),
   ];
 
   return Drawer

@@ -42,11 +42,11 @@ class TopMenu extends StatelessWidget implements PreferredSizeWidget {
   List<Widget> _buildDesktopActions(BuildContext context) {
     final menuItems = [
       ('Home', '/'),
-      ('About', '/about'),
-      ('Music', '/music'),
+      ('About', '/about'),  
       ('Study', '/study'),
       ('Projects', '/projects'),
-      ('Apps', '/apps'),
+      ('Travel', '/travel'),
+      ('Music', '/music'),
     ];
 
     return [

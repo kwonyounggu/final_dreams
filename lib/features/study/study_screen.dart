@@ -1,17 +1,17 @@
-import 'package:final_dreams/features/study/study_detail_screen.dart';
-import 'package:final_dreams/features/study/study_structure.dart';
-import 'package:final_dreams/features/study/study_repository.dart';
+import 'package:final_dreams/features/study/models/study_repository.dart';
+import 'package:final_dreams/features/study/models/study_structure.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'study_detail_screen.dart';
 
 final studiesProvider = FutureProvider<List<Study>>((ref) {
   return StudyRepository.loadStudies();
 });
 
-class StudyScreen extends ConsumerWidget {
+class StudyScreen extends ConsumerWidget 
+{
   const StudyScreen({super.key});
-
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -42,7 +42,8 @@ class StudyScreen extends ConsumerWidget {
   }
 }
 
-class StudyCard extends StatelessWidget {
+class StudyCard extends StatelessWidget 
+{
   final Study study;
   const StudyCard({super.key, required this.study});
 

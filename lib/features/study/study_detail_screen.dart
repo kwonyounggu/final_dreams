@@ -1,5 +1,5 @@
-import 'package:final_dreams/features/study/study_structure.dart';
-import 'package:final_dreams/features/study/study_repository.dart';
+import 'package:final_dreams/features/study/models/study_repository.dart';
+import 'package:final_dreams/features/study/models/study_structure.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 
