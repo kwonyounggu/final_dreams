@@ -61,20 +61,32 @@ final routerProvider = Provider<GoRouter>
               name: 'music',
               builder: (context, state) => const MusicScreen(),
             ),
-            GoRoute
-            (
+            // In router_provider.dart
+            
+            GoRoute(
               path: '/study',
               name: 'study',
-              //builder: (context, state) => const StudyScreen(),
-              pageBuilder: (context, state) => NoTransitionPage
-              (
-                child: Title
-                (
-                  title: 'Study & Research | YounG',
+              // 4. Clicking 'Study' menu directly displays the Library Overview (topic is null)
+              pageBuilder: (context, state) => NoTransitionPage(
+                child: Title(
+                  title: 'Study Library | YounG',
                   color: Colors.lightBlue,
-                  child: StudyScreen(),
+                  child: const StudyScreen(), // topic and fileName will be null
                 ),
               ),
+            ),
+            GoRoute(
+              path: '/study/:topicAndFile', 
+              // 3 & 5. Clicking a Note displays the Markdown reader
+              builder: (context, state) {
+                final param = state.pathParameters['topicAndFile'] ?? '';
+                final parts = param.split(':');
+                
+                final topic = parts[0]; 
+                final fileName = parts.length > 1 ? parts[1] : 'intro';
+                
+                return StudyScreen(topic: topic, fileName: fileName);
+              },
             ),
             GoRoute
             (

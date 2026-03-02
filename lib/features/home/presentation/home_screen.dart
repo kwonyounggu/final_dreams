@@ -136,12 +136,14 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
   }
 }
 
+// home_screen.dart
+
+// Inside home_screen.dart
 class StudyGrid extends StatelessWidget {
   const StudyGrid({super.key});
 
   @override
   Widget build(BuildContext context) {
-    // Determine grid columns based on screen width
     double width = MediaQuery.of(context).size.width;
     int crossAxisCount = width > 900 ? 3 : 1;
 
@@ -152,78 +154,41 @@ class StudyGrid extends StatelessWidget {
         crossAxisCount: crossAxisCount,
         crossAxisSpacing: 20,
         mainAxisSpacing: 20,
-        // CHANGED: 1.3 provides more vertical height than 1.5
-        childAspectRatio: width > 1200 ? 1.4 : 1.2, 
+        childAspectRatio: width > 1200 ? 1.0 : 0.8, 
       ),
       itemCount: myInterests.length,
       itemBuilder: (context, index) {
         final topic = myInterests[index];
         return Card(
-          clipBehavior: Clip.antiAlias,
-          elevation: 2,
-          child: InkWell(
-            onTap: () => _handleNavigation(context, topic.title),
-            child: Padding(
-              // CHANGED: Reduced from 20 to 16 to save 8px of vertical space
-              padding: const EdgeInsets.all(16.0), 
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  // CHANGED: Icon reduced from 40 to 32 to save 8px
-                  Icon(topic.icon, size: 32, color: Theme.of(context).primaryColor),
-                  const SizedBox(height: 12),
-                  Text(
-                    topic.title, 
-                    style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
-                    textAlign: TextAlign.center,
-                  ),
-                  const SizedBox(height: 8),
-                  // ADDED: Flexible prevents the 'yellow stripe' overflow error
-                  Flexible(
-                    child: Text(
-                      topic.description, 
-                      textAlign: TextAlign.center, 
-                      maxLines: 3,
-                      overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(fontSize: 14),
-                    ),
-                  ),
-                ],
-              ),
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              children: [
+                Icon(topic.icon, size: 32, color: Theme.of(context).primaryColor),
+                const SizedBox(height: 8),
+                Text(topic.title, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
+                const Divider(),
+                // Show ONLY 3 notes on Home Screen
+                ...topic.notes.take(3).map((note) => ListTile(
+                  dense: true,
+                  title: Text(note.title, style: const TextStyle(fontSize: 13)),
+                  trailing: const Icon(Icons.chevron_right, size: 14),
+                  onTap: () => context.go('/study/${topic.id}:${note.fileName}'),
+                )),
+                const Spacer(),
+                TextButton(
+                  onPressed: () => context.go('/study'),
+                  child: const Text("View Library"),
+                )
+              ],
             ),
           ),
         );
       },
     );
   }
-
-  void _handleNavigation(BuildContext context, String title) {
-    switch (title) {
-      case "Apps":
-        //Navigator.push(context, MaterialPageRoute(builder: (context) => const ProjectsPage()));
-        context.go('/apps');
-        break;
-      case "Buddhism":
-        //Navigator.push(context, MaterialPageRoute(builder: (context) => const BuddhismHomePage()));
-        context.go('/study'); // fallback to study list for now
-        break;
-      case "Quantum Mechanics":
-        //Navigator.push(context, MaterialPageRoute(builder: (context) => const PhysicsListPage()));
-        context.go('/study');
-        break;
-      case "Vision Science":
-        // UPDATED: Now navigates to your interactive lab
-        //Navigator.push(context, 
-        //  MaterialPageRoute(builder: (context) => const VisionSciencePage()));
-        context.go('/study');
-        break;
-    
-      default:
-        //debugPrint("No route defined for $title");
-        context.go('/study');
-    }
-  }
 }
+
 class ProjectsGrid extends StatelessWidget {
   const ProjectsGrid({super.key});
 
