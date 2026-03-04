@@ -51,24 +51,42 @@ class TopMenu extends StatelessWidget implements PreferredSizeWidget {
 
     return [
       for (final item in menuItems)
-        Padding(
+        Padding
+        (
           padding: const EdgeInsets.symmetric(horizontal: 4.0),
-          child: _buildNavButton(
+          child: _buildNavButton
+          (
             context,
             label: item.$1,
             route: item.$2,
-            isActive: currentLocation == item.$2,
+            // FIX: Check if current location starts with the route path
+            isActive: _isActive(item.$2),
           ),
         ),
     ];
   }
-
-  Widget _buildNavButton(
-    BuildContext context, {
-    required String label,
-    required String route,
-    required bool isActive,
-  }) {
+  bool _isActive(String menuRoute) 
+  {
+    if (currentLocation == menuRoute) return true;
+    
+    // For parent routes, highlight if current location starts with the route
+    if (menuRoute == '/study' && currentLocation.startsWith('/study/')) return true;
+    if (menuRoute == '/projects' && currentLocation.startsWith('/projects/')) return true;
+    if (menuRoute == '/travel' && currentLocation.startsWith('/travel/')) return true;
+    if (menuRoute == '/music' && currentLocation.startsWith('/music/')) return true;
+    
+    return false;
+  }
+  Widget _buildNavButton
+  (
+    BuildContext context, 
+    {
+      required String label,
+      required String route,
+      required bool isActive,
+    }
+  ) 
+  {
     return MouseRegion(
       cursor: SystemMouseCursors.click,
       child: AnimatedContainer(

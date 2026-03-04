@@ -137,6 +137,20 @@ Widget _buildDrawer(BuildContext context, String currentLocation)
     ('Music', '/music'),
   ];
 
+  // Helper function to determine if a menu item should be highlighted
+  bool _isActive(String menuRoute) {
+    // Exact match
+    if (currentLocation == menuRoute) return true;
+    
+    // Parent routes should be active for their children
+    if (menuRoute == '/study' && currentLocation.startsWith('/study/')) return true;
+    if (menuRoute == '/projects' && currentLocation.startsWith('/projects/')) return true;
+    if (menuRoute == '/travel' && currentLocation.startsWith('/travel/')) return true;
+    if (menuRoute == '/music' && currentLocation.startsWith('/music/')) return true;
+    
+    return false;
+  }
+
   return Drawer
   (
     child: ListView
@@ -157,7 +171,7 @@ Widget _buildDrawer(BuildContext context, String currentLocation)
           ListTile
           (
             title: Text(item.$1),
-            selected: currentLocation == item.$2,
+            selected: _isActive(item.$2), // Clean and readable!
             onTap: () 
             {
               context.go(item.$2);

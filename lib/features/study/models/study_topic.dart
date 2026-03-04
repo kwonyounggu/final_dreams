@@ -30,9 +30,9 @@ final List<StudyTopic> myInterests = [
     description: "Daily reflections on mindfulness and the nature of self.", 
     icon: Icons.self_improvement,
     notes: [
-      StudyNote(title: "Dependent Origination", fileName: "2025-02-28-Dependent-Origination"),
-      StudyNote(title: "The Eightfold Path", fileName: "2025-02-15-Eightfold-Path"),
-      StudyNote(title: "Introduction to Zen", fileName: "2025-01-10-Zen-Intro"),
+      StudyNote(title: "2025-02-28-Dependent-Origination", fileName: "2025-02-28-Dependent-Origination"),
+      StudyNote(title: "2025-02-15-Eightfold-Path", fileName: "2025-02-15-Eightfold-Path"),
+      StudyNote(title: "2025-01-10-Zen-Intro", fileName: "2025-01-10-Zen-Intro"),
       StudyNote(title: "Four Noble Truths", fileName: "four-noble-truths"),
     ],
   ),
